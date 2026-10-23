@@ -1,5 +1,7 @@
 # System Design Path
 
+[Open the guide](https://builtbyankit.github.io/system-design-path/)
+
 A minimal, browser-based system design course with **10 phases, 30 lessons, 30 patterns and 25 worked design questions**. Each lesson includes theory, an example, tradeoffs, an exercise, answer reasoning and primary references. Navigation has three sections: Learn, Patterns and Design Questions.
 
 The course follows a practical loop: predict, learn, design, break and explain. It includes suggested study schedules, three backend project exercises, a capacity calculator, per-design mock timer, a self-assessment rubric, local progress and a downloadable Markdown guide. Project exercises are instructions to implement in your own environment, not browser-executed backend labs.
