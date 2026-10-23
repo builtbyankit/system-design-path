@@ -1,11 +1,13 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
-const content={...require('./curriculum.cjs'),patterns:require('./patterns.cjs'),designs:require('./designs.cjs')};
+const content=require('./content.cjs');
 for(const [name,list] of Object.entries(content).filter(([,v])=>Array.isArray(v))){assert.equal(new Set(list.map(x=>x.id)).size,list.length,`${name} duplicate ids`);}
-assert.equal(content.lessons.length,30);assert.equal(content.patterns.length,30);assert.equal(content.designs.length,25);
+assert.equal(content.lessons.length,48);assert.equal(content.patterns.length,30);assert.equal(content.designs.length,30);
 for(const p of content.phases)assert.equal(content.lessons.filter(l=>l.phase===p.id).length,3);
 for(const l of content.lessons){for(const field of ['model','worked','tradeoff','exercise','answer'])assert.ok(l[field].length>(field==='exercise'?20:60),`${l.id}/${field}`);for(const r of l.refs)assert.ok(content.refs[r]);}
 for(const p of content.patterns){assert.ok(content.lessons.some(l=>l.id===p.lesson));for(const r of p.refs)assert.ok(content.refs[r]);}
 for(const d of content.designs){assert.ok(d.flow.length>=3);assert.equal(d.followup.length,3);for(const p of d.patterns)assert.ok(content.patterns.some(x=>x.id===p),`${d.id}/${p}`);for(const field of ['requirements','scale','api','data','decision','failure'])assert.ok(d[field].length>80,`${d.id}/${field}`);}
+for(const d of content.designs){const w=d.walkthrough;assert.ok(w,d.id+' walkthrough');assert.equal(w.answers.length,d.followup.length);assert.equal(w.hints.length,2);assert.equal(w.alternatives.length,2);assert.equal(w.timeline.length,4);for(const v of [...w.answers,...w.hints,...w.alternatives,...w.timeline,w.calculation,w.migration,w.weak,w.strong])assert.ok(v&&v.length>10,d.id+' empty depth');if(d.architecture)for(const [a,b,label] of d.architecture.edges){assert.ok(d.architecture.nodes[a]&&d.architecture.nodes[b]&&label);}}
+assert.equal(content.labs.length,4);for(const l of content.labs)assert.ok(content.lessons.some(x=>x.id===l.lesson));
 // A lightweight DOM harness verifies every route and the real state handlers.
 let elements=[];const memory=new Map();
 function node(tag='div',attrs={}){const classes=new Set();const n={tagName:tag.toUpperCase(),attrs,dataset:{},style:{},value:attrs.value||'',textContent:'',children:[],open:false,disabled:false,classList:{add:c=>classes.add(c),remove:c=>classes.delete(c),toggle(c,on){if(on===undefined)on=!classes.has(c);on?classes.add(c):classes.delete(c);}},setAttribute(k,v){this.attrs[k]=v;},removeAttribute(k){delete this.attrs[k];},addEventListener(k,fn){this['on'+k]=fn;},focus(){},scrollIntoView(){}};for(const [k,v]of Object.entries(attrs))if(k.startsWith('data-'))n.dataset[k.slice(5).replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]=v;let html='';Object.defineProperty(n,'innerHTML',{get:()=>html,set(value){html=value;const remove=new Set();const walk=e=>{for(const c of e.children){remove.add(c);walk(c);}};walk(n);elements=elements.filter(e=>!remove.has(e));n.children=[];for(const m of value.matchAll(/<([a-z]+)\b([^>]*)>/g)){const a={};for(const z of m[2].matchAll(/([\w-]+)(?:="([^"]*)")?/g))a[z[1]]=z[2]??'';const child=node(m[1],a);elements.push(child);n.children.push(child);}}});return n;}
@@ -13,7 +15,7 @@ function matches(e,s){if(s.startsWith('#'))return e.attrs.id===s.slice(1);const 
 const document={querySelector:s=>elements.find(e=>matches(e,s))||null,querySelectorAll:s=>elements.filter(e=>matches(e,s)),getElementById:id=>elements.find(e=>e.attrs.id===id)||null,title:''};
 for(const id of ['view','breadcrumb','progress-label','progress-bar','notice'])elements.push(node('div',{id}));for(const name of ['learn','patterns','questions'])elements.push(node('a',{'data-nav':name}));
 const context={document,location:{hash:''},localStorage:{getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v)},console,setTimeout:()=>1,clearTimeout(){},setInterval:()=>1,clearInterval(){},Date,window:{addEventListener(){},scrollTo(){},matchMedia:()=>({matches:true})}};vm.createContext(context);
-vm.runInContext(fs.readFileSync('dist/data.js','utf8'),context);vm.runInContext(fs.readFileSync('dist/app.js','utf8'),context);
+vm.runInContext(fs.readFileSync('dist/data.js','utf8'),context);vm.runInContext(fs.readFileSync('dist/depth.js','utf8'),context);vm.runInContext(fs.readFileSync('dist/app.js','utf8'),context);
 function run(code){return vm.runInContext(code,context);}
 assert.ok(document.querySelector('#view').innerHTML.includes('Build systems you can explain'));
 for(const [type,list]of [['lesson',content.lessons],['pattern',content.patterns],['design',content.designs]])for(const item of list){context.location.hash=`#${type}/${item.id}`;run('render()');assert.equal(document.title,item.title+' · System Design Path');assert.ok(document.querySelector('#view').innerHTML.length>1000);}
@@ -23,7 +25,12 @@ assert.equal(run("filterItems('questions','','Advanced').length"),content.design
 context.location.hash='#lesson/estimation';run('render()');assert.ok(document.querySelector('#calc-results').innerHTML.includes('1,800'));document.querySelector('#calc-peak').value='-1';document.querySelector('#calc-peak').oninput();assert.ok(document.querySelector('#calc-results').textContent.includes('valid'));assert.equal(run('estimate({users:10000000,reads:20,writes:2,peak:5,bytes:1,days:30,replicas:3}).gb'),1800);
 context.location.hash='#design/payments';run('render()');document.querySelector('#timer-start').onclick();assert.ok(run('timerEnd!==null'));document.querySelector('#timer-start').onclick();assert.equal(run('timerEnd'),null);document.querySelector('#timer-reset').onclick();assert.equal(run('timerRemaining'),2700);for(const e of document.querySelectorAll('[data-score]'))e.value='2';document.querySelector('[data-score]').onchange();assert.ok(document.querySelector('#score-result').textContent.startsWith('12/12'));
 context.location.hash='#lesson/missing';run('render()');assert.ok(document.querySelector('#view').innerHTML.includes('not in the guide'));
-assert.ok(fs.readFileSync('dist/guide.md','utf8').includes('Distributed identifier generator'));
-console.log('PASS: content links, 85 detail routes, search/filter, completion persistence, calculator, timer, rubric, missing routes and downloadable guide.');
+const guide=fs.readFileSync('dist/guide.md','utf8');assert.ok(guide.includes('Distributed identifier generator'));for(const d of content.designs){assert.ok(guide.includes(d.walkthrough.migration));for(const answer of d.walkthrough.answers)assert.ok(guide.includes(answer));}
+assert.equal(fs.readFileSync('dist/labs.cjs','utf8'),fs.readFileSync('labs/run.cjs','utf8'));
+context.location.hash='#design/payments';run('render()');assert.ok(document.querySelector('#view').innerHTML.includes('<svg'));assert.ok(document.querySelector('#view').innerHTML.includes('Hint 1'));assert.ok(document.querySelector('#view').innerHTML.includes('Stronger answer'));
+context.location.hash='#lesson/lru-design';run('render()');assert.ok(document.querySelector('#view').innerHTML.includes('Implementation sketch'));
+context.location.hash='#learn';run('render()');assert.ok(document.querySelector('#view').innerHTML.includes('Download lab runner'));
+console.log('PASS: content links, 108 detail routes, search/filter, completion persistence, calculator, timer, rubric, missing routes and downloadable guide.');
+
 
 

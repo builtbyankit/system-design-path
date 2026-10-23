@@ -3,6 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "description": "A practical system design course, pattern catalog and interview workbook",
-  "scripts": {"build": "node build.cjs", "test": "node check.cjs", "start": "node server.cjs"},
-  "engines": {"node": ">=22"}
+  "scripts": {
+    "build": "node build.cjs",
+    "test": "node check.cjs && node labs/run.cjs all",
+    "start": "node server.cjs",
+    "labs": "node labs/run.cjs all",
+    "lab:reservation": "node labs/run.cjs reservation",
+    "lab:outbox": "node labs/run.cjs outbox",
+    "lab:cache": "node labs/run.cjs cache",
+    "lab:overload": "node labs/run.cjs overload"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
 }
