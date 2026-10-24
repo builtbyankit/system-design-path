@@ -99,3 +99,16 @@ footer { gap:20px; line-height:1.7; }
 .modern-phase .lesson-row span { font-size:10px; color:var(--accent); padding-top:3px; }
 .modern-phase .lesson-row.completed { background:var(--soft); }
 @media(max-width:750px) { .modern-phase { grid-template-columns:minmax(0,1fr); padding:20px; gap:0; } .modern-phase .phase-num { display:none; } .modern-phase h3 { font-size:17px; } .modern-phase .lesson-row { padding:13px 0; } }
+
+/* Warm, low-glare light palette. */
+:root:not([data-theme=dark]) { --paper:#faf6ed; --soft:#f2ecdf; --ink:#302e28; --muted:#706b60; --line:#e2dacb; --accent:#57684b; --tint:#eaeedd; }
+html:not([data-theme=dark]) body { background:var(--paper); }
+html:not([data-theme=dark]) aside { background:var(--soft); }
+html:not([data-theme=dark]) nav a.active,html:not([data-theme=dark]) nav a:hover { background:#e8e2d5; color:var(--ink); }
+html:not([data-theme=dark]) .modern-list .card,html:not([data-theme=dark]) .modern-phase,html:not([data-theme=dark]) .panel { background:#fcf9f2; }
+html:not([data-theme=dark]) input,html:not([data-theme=dark]) select,html:not([data-theme=dark]) textarea,html:not([data-theme=dark]) .btn.light,html:not([data-theme=dark]) .mastery-banner .btn,html:not([data-theme=dark]) .button.secondary,html:not([data-theme=dark]) .tabs button,html:not([data-theme=dark]) .diagram-node,html:not([data-theme=dark]) .skip { background:#fcf9f2; color:var(--ink); border-color:var(--line); }
+html:not([data-theme=dark]) .callout,html:not([data-theme=dark]) th,html:not([data-theme=dark]) .reader pre,html:not([data-theme=dark]) .reader code { background:var(--soft); }
+html:not([data-theme=dark]) .reader pre code { background:none; color:var(--ink); }
+html:not([data-theme=dark]) .bar,html:not([data-theme=dark]) .progress-track { background:#e4dece; }
+html:not([data-theme=dark]) .architecture-svg rect { fill:#fcf9f2; stroke:#c6ccb6; }
+html:not([data-theme=dark]) .btn.light:hover,html:not([data-theme=dark]) .button.secondary:hover,html:not([data-theme=dark]) .theme-toggle:hover { background:var(--soft); }
