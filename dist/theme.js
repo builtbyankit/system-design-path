@@ -11,12 +11,15 @@
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = dark ? '#171b19' : '#ffffff';
     const toggle = document.getElementById('theme-toggle');
-    if (toggle) toggle.setAttribute('aria-pressed', String(dark));
+    if (toggle) {
+      toggle.setAttribute('aria-pressed', String(dark));
+      toggle.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+    }
   }
   apply();
   document.addEventListener('DOMContentLoaded', () => {
     apply();
-    document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.getElementById('theme-toggle')?.addEventListener('click', () => {
       preference = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
       try { localStorage.setItem(key, preference); } catch {}
       apply();

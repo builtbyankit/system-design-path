@@ -1,0 +1,69 @@
+/* Shared visual rhythm and resilient layouts for both study guides. */
+:root { --soft:#f7f8f6; --accent:#42664c; --radius:8px; }
+html { scrollbar-gutter:stable; }
+body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+main, #view, .reader, .card, .phase > div { min-width:0; }
+header { min-height:76px; height:auto; padding:16px 0; gap:20px; }
+.header-actions { gap:18px; }
+.header-actions > a { padding:10px 0; }
+.theme-toggle { display:inline-flex; align-items:center; gap:8px; min-height:40px; padding:8px 12px; border-radius:var(--radius); }
+.theme-toggle::before { content:''; width:12px; height:12px; border:1.5px solid currentColor; border-radius:50%; background:linear-gradient(90deg,currentColor 50%,transparent 50%); }
+.theme-toggle[aria-pressed=true] { border-color:var(--line); }
+#view { padding-top:40px; }
+h1 { font-size:clamp(28px,3vw,40px); letter-spacing:-1.1px; line-height:1.22; max-width:850px; text-wrap:balance; }
+h2,h3 { text-wrap:pretty; }
+p,li,.card,.lesson-row,.next-prev a { overflow-wrap:anywhere; }
+.reader p,.reader li { line-height:1.9; }
+.reader p { max-width:76ch; }
+.reader pre { max-width:100%; tab-size:4; }
+.reader a:not(.btn):not(.button),.references a { text-underline-offset:4px; }
+nav a { min-height:42px; display:flex; align-items:center; border-radius:7px; }
+nav a.active { box-shadow:inset 3px 0 0 var(--accent); }
+.btn,.button { min-height:40px; border-radius:6px; }
+input,select,textarea { min-height:42px; border-radius:6px; max-width:100%; }
+input::placeholder,textarea::placeholder { color:var(--muted); opacity:1; }
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+details { border-radius:var(--radius); padding:18px 20px; }
+summary { line-height:1.65; }
+.card { padding:24px 0; }
+.card h3 { line-height:1.55; }
+.card p { line-height:1.8; }
+.card a.stretched:focus-visible { border-radius:4px; }
+.panel,.calculator,.architecture { border-radius:var(--radius); }
+.callout { border-radius:0 var(--radius) var(--radius) 0; }
+.table-wrap { max-width:100%; }
+.toolbar { align-items:center; gap:10px; }
+.toolbar > * { min-width:0; }
+footer { gap:20px; line-height:1.7; }
+@media(hover:hover) { .card:hover h3 { color:var(--accent); } .lesson-row:hover { background:var(--soft); } }
+@media(max-width:750px) {
+ header { flex-wrap:wrap; gap:4px 14px; padding:12px 0; min-height:70px; }
+ #breadcrumb { flex:1 1 130px; font-size:11px; }
+ .header-actions { gap:14px; margin-left:auto; }
+ #view { padding-top:30px; }
+ nav a { min-height:44px; }
+ nav a.active { box-shadow:inset 0 -2px 0 var(--accent); }
+ .toolbar input { flex:1 1 100%; min-width:0; }
+ .toolbar select { min-width:0; width:100%; max-width:100%; }
+ .reader pre { padding:14px; font-size:11px; }
+ .reader h2,.reader h3 { margin-top:28px; }
+}
+@media(max-width:380px) {
+ header { align-items:flex-start; }
+ #breadcrumb { flex-basis:100%; }
+ .header-actions { width:100%; justify-content:space-between; margin-left:0; }
+ .stats { gap:16px; }
+}
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; } }
+
+/* System design preserves diagram space and a readable lesson column. */
+.lesson-row { padding:12px 8px; margin:0 -8px; border-radius:5px; }
+.lesson-row strong { line-height:1.7; }
+.reader-layout { grid-template-columns:minmax(0,780px) 170px; gap:40px; }
+.toc { line-height:1.8; }
+.toc a { padding:3px 0; }
+.card h3 { font-size:17px; }
+.cards { column-gap:36px; }
+.architecture { padding:24px; }
+@media(max-width:1100px) { .reader-layout { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:750px) { .architecture { padding:14px; } .lesson-row { align-items:flex-start; } }
