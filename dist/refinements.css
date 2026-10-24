@@ -67,3 +67,35 @@ footer { gap:20px; line-height:1.7; }
 .architecture { padding:24px; }
 @media(max-width:1100px) { .reader-layout { grid-template-columns:minmax(0,1fr); } }
 @media(max-width:750px) { .architecture { padding:14px; } .lesson-row { align-items:flex-start; } }
+
+/* Learn and pattern catalogs: distinct cards, compact metadata, clear actions. */
+.modern-list { gap:16px; margin-top:20px; align-items:stretch; }
+.modern-list .card { border:1px solid var(--line); border-radius:12px; background:var(--paper); padding:24px; position:relative; min-width:0; box-shadow:0 2px 5px rgb(0 0 0 / 2%); transition:border-color .16s ease,box-shadow .16s ease; }
+.modern-list .card h3 { font-size:17px; font-weight:600; letter-spacing:-.25px; margin:16px 0 10px; line-height:1.5; }
+.modern-list .card p { font-size:12px; line-height:1.8; margin-bottom:22px; color:var(--muted); }
+.modern-list .card:focus-within { border-color:var(--accent); }
+.modern-list .card-top,.modern-list .meta { gap:12px; align-items:center; }
+.modern-list .phase-icon { display:grid; place-items:center; width:34px; height:34px; flex-shrink:0; border-radius:9px; background:var(--soft); color:var(--accent); font:12px ui-monospace,monospace; border:1px solid var(--line); }
+.modern-list .tag,.modern-list .meta > span:first-child { color:var(--accent); background:var(--soft); border:1px solid var(--line); border-radius:20px; padding:4px 9px; font-size:10px; line-height:1.5; letter-spacing:.2px; }
+.modern-list .tag { text-align:right; }
+.modern-list .card-bottom { font-size:10px; padding-top:11px; margin-top:0; gap:10px; }
+.modern-list .card-bottom > span:last-child { white-space:nowrap; color:var(--accent); font-weight:600; }
+.modern-list .bar { height:4px; border-radius:8px; }
+.modern-list .bar i { background:var(--accent); border-radius:8px; }
+.modern-list .arrow { display:block; color:var(--accent); font-size:11px; font-weight:600; border-top:1px solid var(--line); padding-top:15px; margin-top:auto; }
+@media(hover:hover) { .modern-list .card:hover { border-color:var(--accent); box-shadow:0 6px 18px rgb(0 0 0 / 5%); } .modern-list .card:hover h3 { text-decoration:none; } }
+@media(max-width:750px) { .modern-list { grid-template-columns:1fr; gap:12px; } .modern-list .card { padding:20px; } }
+@media(prefers-reduced-motion:reduce) { .modern-list .card { transition:none; } }
+
+.cards.modern-list > .card { display:flex; flex-direction:column; }
+.modern-phase { grid-template-columns:44px minmax(0,1fr); gap:20px; padding:26px; margin:16px 0; border:1px solid var(--line); border-radius:12px; background:var(--paper); }
+.modern-phase .phase-num { display:grid; place-items:center; width:42px; height:42px; padding:0; border:1px solid var(--line); border-radius:12px; background:var(--soft); color:var(--accent); }
+.phase-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0 0 9px; }
+.phase-label { font-size:9px; letter-spacing:1.2px; color:var(--accent); }
+.phase-count { font-size:10px; color:var(--muted); background:var(--soft); border:1px solid var(--line); border-radius:20px; padding:3px 9px; white-space:nowrap; }
+.modern-phase h3 { font-size:18px; letter-spacing:-.3px; margin-bottom:8px; }
+.modern-phase p { margin-bottom:20px; max-width:75ch; }
+.modern-phase .lesson-row { border-top:1px solid var(--line); margin:0; padding:13px 10px; border-radius:5px; }
+.modern-phase .lesson-row span { font-size:10px; color:var(--accent); padding-top:3px; }
+.modern-phase .lesson-row.completed { background:var(--soft); }
+@media(max-width:750px) { .modern-phase { grid-template-columns:minmax(0,1fr); padding:20px; gap:0; } .modern-phase .phase-num { display:none; } .modern-phase h3 { font-size:17px; } .modern-phase .lesson-row { padding:13px 0; } }
